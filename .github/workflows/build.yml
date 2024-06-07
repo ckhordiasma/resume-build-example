@@ -44,7 +44,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     steps:
       - name: make an artifacts directory
         run: mkdir artifacts
