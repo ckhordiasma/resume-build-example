@@ -2,11 +2,11 @@ name: "Build and release PDFs"
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
     paths: 
       - "**/*.tex"
   pull_request:
-    branches: [ master ]
+    branches: [ master, main ]
     paths: 
       - "**/*.tex"
 
