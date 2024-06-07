@@ -1,0 +1,125 @@
+\documentclass[11pt,letterpaper,sans]{moderncv}
+\moderncvstyle{banking}
+\moderncvcolor{black}
+%\nopagenumbers{}
+\usepackage[utf8]{inputenc}
+\usepackage{ragged2e}
+\usepackage[scale=0.915]{geometry}
+\usepackage{import}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\DeclareFontSeriesDefault[sf]{bf}{bx}
+\input{glyphtounicode}
+\pdfgentounicode=1 
+
+%\usepackage{showframe}
+\name{Peter}{Parker}
+\newcommand*{\customcventry}[7][1.0em]{
+  \begin{tabular}[t]{@{}l} % First row, left side
+  {\bfseries #4} #6  
+  {\itshape #3} 
+  \end{tabular} 
+  \hfill  
+  \begin{tabular}[t]{l@{}} % First row, right side 
+  {\bfseries #5}\enspace 
+  {\itshape #2}
+  \end{tabular} 
+  \ifx&#7& % if #7 is empty (the bullet section), do nothing
+  \else{
+  \par\addvspace{.5em} % padding between first row and bullets
+  \begin{minipage}{196mm}%
+  #7 
+  \end{minipage}
+  }\fi
+  \par\addvspace{#1} % padding at the end of the section
+}
+\newcommand*{\eduentry}[7][.13em]{
+  \customcventry[#1]{#2}{#3}{#4}{#5}{#6}{#7}
+}
+\newcommand{\myemail}{noreply@gmail.com}
+% Reducing the space before the section
+\newcommand{\resumetitle}{
+  \makecvtitle
+  \thispagestyle{empty}
+  \vspace*{-14mm} 
+  \begin{center}
+  \begin{tabular}{ c c c } 
+  \faMobile\enspace (808) 909-1010\enspace & 
+  \faEnvelope\enspace\href{mailto://\myemail}{\myemail} &
+  \enspace\faHome\enspace North Pole, AK
+  \end{tabular} \\
+
+  \begin{tabular}{c c}
+  \faLinkedin\enspace  \href{https://www.linkedin.com/in/noreply/}{linkedin/noreply} &
+  \enspace\faGithub\enspace  \href{https://github.com/noreply}{github/noreply} 
+  \end{tabular}
+  \end{center}
+}
+
+\newcommand{\resumefooter}{
+\fancyfoot[l]{
+  \parbox[b]{10cm}{
+    Peter Parker~~\emailsymbol\href{mailto://\myemail}{\myemail}
+}}
+}
+
+\begin{document}
+\resumetitle
+\vspace{-1.25em}
+\section{Profile}
+Just your average news photographer looking to get a job after getting fired... again. Please hire me for Role 2!!!
+
+\vspace{-0.0em}
+\section{Professional Experience}
+\customcventry{01/2020 ‐ present\enspace}
+{The Daily Bugle}
+{Lead Photo Takener}{New York, NY}{}
+{
+{\begin{itemize}[leftmargin=0.6cm, label={\textbullet}, itemsep=0.0em]
+  \item Took lots of pictures
+  \item Especially of Spiderman
+  \item And of bad guys too
+\end{itemize}}}
+
+\customcventry{09/2017 ‐ 07/2020} 
+{The Baily Dugle}
+{Underpaid Photographer}{New York, NY}{}
+{
+{\begin{itemize}[leftmargin=0.6cm, label={\textbullet}, itemsep=0.0em]
+  \item Took terrible smartphone pictures
+  \item But they were of Spiderman
+  \item So people still wanted them
+\end{itemize}}
+}
+
+\vspace{-0.5em} 
+\section{Projects}
+{\begin{itemize}[label=\textbullet, itemsep=0.5em]
+  \item \textbf{Sticky Web Thing: } Made a thingy that spits out sticky webs
+  \item \textbf{Full Body Suit: } Hand-sewed a full-body, red-and-blue spandex superhero outfit
+\end{itemize}}
+
+\vspace{-1.5em}
+\section{Education}
+\eduentry{2014-2016}{
+  {Empire State University} 
+}{M.S. Technical Webslinging}
+{New York, NY}{4.0}{}{}
+
+\eduentry{2010-2014}{
+  {Rebel State University}
+}{B.S. Spider Manning}
+{Terre Haute, IN}{4.0}{}{}
+
+\vspace{-0.5em}
+\section{Skills and Qualifications}
+{\begin{itemize}[label=\textbullet, itemsep=-0.1em]
+  \item {\textbf{Athletics:} Parkour, Climbing Walls, Falling from High Places}
+  \item {\textbf{Languages:} Can sometimes talk to spiders}
+\end{itemize}}
+
+% Resume footer only appears on page 2 onwards
+\resumefooter
+\end{document}

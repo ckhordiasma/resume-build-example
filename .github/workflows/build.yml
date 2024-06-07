@@ -1,0 +1,64 @@
+name: "Build and release PDFs"
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - "**/*.tex"
+  pull_request:
+    branches: [ master ]
+    paths: 
+      - "**/*.tex"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/moderncv/debian-texlive-docker:main
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build resume PDFs # the forward slash after asterisk is important for ignoring regular files
+        run: |
+          for folder in $(ls -d resumes/*/ | grep -v "resumes/header"); do 
+          cd $folder && ls
+          NAME=$(basename "$folder")
+          latexmk -pdf -jobname="NAME-r${{github.run_number}}"
+          cd -
+          done
+      - name: Build cover letter PDFs
+        run: |
+          for folder in $(ls -d cover-letters/*/ | grep -v "cover-letters/header"); do 
+          cd $folder && ls
+          NAME=$(basename "$folder") 
+          latexmk -pdf -jobname="cover-$NAME-r${{github.run_number}}"
+          cd -
+          done
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: |
+            cover-letters/*/*.pdf
+            resumes/*/*.pdf
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: make an artifacts directory
+        run: mkdir artifacts
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
+      - name: Show artifacts
+        run: ls -R .
+      - name: Create a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create --latest --repo ${{github.repository}} 
+          "r${{github.run_number}}" ./artifacts/resumes/*/*.pdf ./artifacts/cover-letters/*/*.pdf
+

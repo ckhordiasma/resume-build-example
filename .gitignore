@@ -1,0 +1,14 @@
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.4ct
+*.4tc
+*.tmp
+*.txt
+*.xref
+*.pdf
+archive/*
+.vscode/*

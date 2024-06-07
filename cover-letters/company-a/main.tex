@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\usepackage{graphicx}
+\pagestyle{empty}
+\newcommand{\company}{Company A}
+\newcommand{\position}{Photo Man}
+% Set page margins
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+\begin{document}
+
+% Your name and address
+\begin{flushleft}
+\textbf{Peter Parker}\\
+1 Spider Street\\
+New York, NY 12345\\
+\end{flushleft}
+% Date
+\begin{flushright}
+\today
+\end{flushright}
+
+% Salutation
+\begin{flushleft}
+    Dear \company{} Hiring Team,
+\end{flushleft}
+
+\vspace{0.5em}
+
+% Body of the cover letter
+\begin{flushleft}
+
+I am writing to express my interest in the \position{} position at \company. I really need a job. Like, really, really need a job. I can't survive on being a vigilante superhero alone. Please hire me.
+\vspace{1em}
+
+Thank you for considering my application, and I look forward to the possibility of discussing more on how I can contribute to \company. 
+Please feel free to contact me at +1 (808) 909-1010 or 
+\href{mailto://noreply@gmail.com}{noreply@gmail.com} to schedule an interview.
+\end{flushleft}
+
+\vspace{1em}
+% Closing
+\begin{flushleft}
+Sincerely, \\[3em]
+Peter Parker
+\end{flushleft}
+
+\end{document}
