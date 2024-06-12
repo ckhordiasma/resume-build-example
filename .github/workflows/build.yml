@@ -23,7 +23,7 @@ jobs:
           for folder in $(ls -d resumes/*/ | grep -v "resumes/header"); do 
           cd $folder && ls
           NAME=$(basename "$folder")
-          latexmk -pdf -jobname="NAME-r${{github.run_number}}"
+          latexmk -pdf -jobname="$NAME-r${{github.run_number}}"
           cd -
           done
       - name: Build cover letter PDFs
