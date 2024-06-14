@@ -2,13 +2,13 @@ name: "Build and release PDFs"
 
 on:
   push:
-    branches: [ master, main ]
-    paths: 
-      - "**/*.tex"
+    tags:
+      - '*'
   pull_request:
     branches: [ master, main ]
     paths: 
       - "**/*.tex"
+      - "**/*.bib"
 
 jobs:
   build:
@@ -23,15 +23,17 @@ jobs:
           for folder in $(ls -d resumes/*/ | grep -v "resumes/header"); do 
           cd $folder && ls
           NAME=$(basename "$folder")
-          latexmk -pdf -jobname="$NAME-r${{github.run_number}}"
+          SUFFIX=$(echo '${{github.ref_name}}' | sed 's|/|-|g')
+          latexmk -pdf -jobname="$NAME-$SUFFIX"
           cd -
           done
       - name: Build cover letter PDFs
         run: |
           for folder in $(ls -d cover-letters/*/ | grep -v "cover-letters/header"); do 
           cd $folder && ls
-          NAME=$(basename "$folder") 
-          latexmk -pdf -jobname="cover-$NAME-r${{github.run_number}}"
+          NAME=$(basename "$folder")
+          SUFFIX=$(echo '${{github.ref_name}}' | sed 's|/|-|g')
+          latexmk -pdf -jobname="cover-$NAME-$SUFFIX"
           cd -
           done
       - name: Upload PDFs
@@ -44,7 +46,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
     steps:
       - name: make an artifacts directory
         run: mkdir artifacts
@@ -60,5 +62,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >
           gh release create --latest --repo ${{github.repository}} 
-          "r${{github.run_number}}" ./artifacts/resumes/*/*.pdf ./artifacts/cover-letters/*/*.pdf
+          "r${{github.ref_name}}" ./artifacts/resumes/*/*.pdf ./artifacts/cover-letters/*/*.pdf
 
