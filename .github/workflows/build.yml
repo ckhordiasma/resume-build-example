@@ -62,5 +62,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: >
           gh release create --latest --repo ${{github.repository}} 
-          "r${{github.ref_name}}" ./artifacts/resumes/*/*.pdf ./artifacts/cover-letters/*/*.pdf
+          "${{github.ref_name}}" ./artifacts/resumes/*/*.pdf ./artifacts/cover-letters/*/*.pdf
 
