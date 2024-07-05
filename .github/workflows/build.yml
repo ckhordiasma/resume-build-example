@@ -9,17 +9,33 @@ on:
     paths: 
       - "**/*.tex"
       - "**/*.bib"
-
+env:
+  BUILD_CONTAINER: ghcr.io/moderncv/debian-texlive-docker:main
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/moderncv/debian-texlive-docker:main
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Build resume PDFs # the forward slash after asterisk is important for ignoring regular files
+      - name: docker cache
+        uses: actions/cache@v4
+        id: docker-cache
+        with:
+          path: "./.cache/docker"
+          key: "texlive-docker"
+      - name: save docker 
+        if: steps.docker-cache.outputs.cache-hit != 'true'
         run: |
+          docker pull $BUILD_CONTAINER
+          mkdir -p ./.cache/docker
+          docker save -o "./.cache/docker/texlive-docker.tar" $BUILD_CONTAINER
+      - name: load docker 
+        if: steps.docker-cache.outputs.cache-hit == 'true'
+        run: |
+          docker load -i "./.cache/docker/texlive-docker.tar"
+      - name: Make resume build script # the forward slash after asterisk is important for ignoring regular files
+        run: |
+          cat << 'EOF' > resume_script.sh
           for folder in $(ls -d resumes/*/ | grep -v "resumes/header"); do 
           cd $folder && ls
           NAME=$(basename "$folder")
@@ -27,8 +43,10 @@ jobs:
           latexmk -pdf -jobname="$NAME-$SUFFIX"
           cd -
           done
-      - name: Build cover letter PDFs
+          EOF
+      - name: Make cover letter build script
         run: |
+          cat << 'EOF' > cover_script.sh
           for folder in $(ls -d cover-letters/*/ | grep -v "cover-letters/header"); do 
           cd $folder && ls
           NAME=$(basename "$folder")
@@ -36,6 +54,14 @@ jobs:
           latexmk -pdf -jobname="cover-$NAME-$SUFFIX"
           cd -
           done
+          EOF
+      - name: check script outputs
+        run: |
+          cat resume_script.sh
+          cat cover_script.sh
+      - name: run docker container to build pdfs
+        run: |
+          docker run -v ./:/workdir ghcr.io/moderncv/debian-texlive-docker:main bash -c "cd workdir && bash ./resume_script.sh && bash ./cover_script.sh"
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
